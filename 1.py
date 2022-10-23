@@ -1,4 +1,12 @@
-"""id=72852957."""
+"""id=72858740."""
+
+
+class FullDekError(Exception):
+    pass
+
+
+class EmptyDekError(Exception):
+    pass
 
 
 class MyQueueSized:
@@ -21,7 +29,7 @@ class MyQueueSized:
 
     def push_back(self, x):
         if self._is_full():
-            return "error"
+            raise FullDekError
         else:
             self.__queue[self.__tail] = x
             self.__tail = self._count_index(self.__tail)
@@ -29,7 +37,7 @@ class MyQueueSized:
 
     def push_front(self, x):
         if self._is_full():
-            return "error"
+            raise FullDekError
         else:
             new_head = self._count_index(self.__head, -1)
             self.__queue[new_head] = x
@@ -38,7 +46,7 @@ class MyQueueSized:
 
     def pop_front(self):
         if self._is_empty():
-            return "error"
+            raise EmptyDekError
         x = self.__queue[self.__head]
         self.__queue[self.__head] = None
         self.__head = self._count_index(self.__head)
@@ -47,7 +55,7 @@ class MyQueueSized:
 
     def pop_back(self):
         if self._is_empty():
-            return "error"
+            raise EmptyDekError
         x = self.__queue[self.__tail-1]
         self.__queue[self.__tail-1] = None
         self.__tail = self._count_index(self.__tail, -1)
@@ -64,9 +72,14 @@ def read_input():
     my_queue = MyQueueSized(n)
     for num_command in range(num):
         command, *value = [x for x in input().strip().split()]
-        a = getattr(my_queue, command)(*value)
-        if a:
-            print(a)
+        try:
+            a = getattr(my_queue, command)(*value)
+            if a:
+                print(a)
+        except FullDekError:
+            print('error')
+        except EmptyDekError:
+            print('error')
 
 
 if __name__ == "__main__":
