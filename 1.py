@@ -2,53 +2,60 @@
 
 
 class MyQueueSized:
-    def __init__(self, n):
-        self.queue = [None] * n
-        self.max_n = n
-        self.head = 0
-        self.tail = 0
-        self.size = 0
+    def __init__(self, max_length):
+        self.__queue = [None] * max_length
+        self.__max_n = max_length
+        self.__head = 0
+        self.__tail = 0
+        self.__size = 0
 
-    def is_empty(self):
-        return self.size == 0
+    def _is_empty(self):
+        return self.__size <= 0
+
+    def _is_full(self):
+        return self.__size >= self.__max_n
+
+    def _count_index(self, current_index, minus=1):
+        result = (current_index + 1 * minus) % self.__max_n
+        return result
 
     def push_back(self, x):
-        if self.size < self.max_n:
-            self.queue[self.tail] = x
-            self.tail = (self.tail + 1) % self.max_n
-            self.size += 1
+        if self._is_full():
+            return "error"
         else:
-            print("error")
+            self.__queue[self.__tail] = x
+            self.__tail = self._count_index(self.__tail)
+            self.__size += 1
 
     def push_front(self, x):
-        if self.size < self.max_n:
-            new_head = (self.head - 1) % self.max_n
-            self.queue[new_head] = x
-            self.size += 1
-            self.head = new_head
+        if self._is_full():
+            return "error"
         else:
-            print("error")
+            new_head = self._count_index(self.__head, -1)
+            self.__queue[new_head] = x
+            self.__size += 1
+            self.__head = new_head
 
     def pop_front(self):
-        if self.is_empty():
+        if self._is_empty():
             return "error"
-        x = self.queue[self.head]
-        self.queue[self.head] = None
-        self.head = (self.head + 1) % self.max_n
-        self.size -= 1
+        x = self.__queue[self.__head]
+        self.__queue[self.__head] = None
+        self.__head = self._count_index(self.__head)
+        self.__size -= 1
         return x
 
     def pop_back(self):
-        if self.is_empty():
+        if self._is_empty():
             return "error"
-        x = self.queue[self.tail-1]
-        self.queue[self.tail-1] = None
-        self.tail = (self.tail - 1) % self.max_n
-        self.size -= 1
+        x = self.__queue[self.__tail-1]
+        self.__queue[self.__tail-1] = None
+        self.__tail = self._count_index(self.__tail, -1)
+        self.__size -= 1
         return x
 
-    def size(self):
-        return self.size
+    def get_size(self):
+        return self.__size
 
 
 def read_input():
@@ -56,22 +63,10 @@ def read_input():
     n = int(input())
     my_queue = MyQueueSized(n)
     for num_command in range(num):
-        input_commands = [x for x in input().strip().split()]
-        command = input_commands[0]
-        if command == 'pop_front':
-            print(my_queue.pop_front())
-        if command == 'pop_back':
-            print(my_queue.pop_back())
-        elif command == 'size':
-            print(my_queue.size)
-        elif command == 'push_front':
-            value = input_commands[1]
-            value = int(value)
-            my_queue.push_front(value)
-        elif command == 'push_back':
-            value = input_commands[1]
-            value = int(value)
-            my_queue.push_back(value)
+        command, *value = [x for x in input().strip().split()]
+        a = getattr(my_queue, command)(*value)
+        if a:
+            print(a)
 
 
 if __name__ == "__main__":
