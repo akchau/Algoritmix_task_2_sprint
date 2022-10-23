@@ -1,7 +1,8 @@
-"""id=72826702."""
+"""id=72857672."""
+import operator
 
 
-class StackMax:
+class Stack:
 
     def __init__(self):
         self.items = []
@@ -20,12 +21,7 @@ class StackMax:
             if self.items[-1] == self.max_items[-1]:
                 self.max_items.pop()
             return self.items.pop()
-        return print('error')
-
-    def get_max(self):
-        if self.max_items:
-            return self.max_items[-1]
-        return None
+        print('error')
 
 
 def read_input():
@@ -34,26 +30,22 @@ def read_input():
 
 
 def solver(arr):
-    number_stack = StackMax()
-    numbers = [str(x) for x in range(-10000, 10000)]
+    number_stack = Stack()
     math_signs = ['+', "-", "*", "/"]
+    operators = {
+        "-": operator.sub,
+        "+": operator.add,
+        "*": operator.mul,
+        "/": operator.floordiv,
+    }
     for element in arr:
-        if element in numbers:
+        if element not in math_signs:
             number_stack.push(int(element))
-        elif element in math_signs:
+        else:
             b = number_stack.pop()
             a = number_stack.pop()
-            if element == "-":
-                result = a - b
-            if element == '+':
-                result = a + b
-            if element == "*":
-                result = a * b
-            if element == "/":
-                result = a // b
+            result = operators[element](a, b)
             number_stack.push(result)
-        else:
-            return print('error')
     return number_stack.items[-1]
 
 
