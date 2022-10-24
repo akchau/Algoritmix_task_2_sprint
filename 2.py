@@ -6,20 +6,12 @@ class Stack:
 
     def __init__(self):
         self.items = []
-        self.max_items = []
 
     def push(self, item):
         self.items.append(item)
-        if self.max_items:
-            if item >= self.max_items[-1]:
-                self.max_items.append(item)
-        else:
-            self.max_items.append(item)
 
     def pop(self):
-        if self.items and self.max_items:
-            if self.items[-1] == self.max_items[-1]:
-                self.max_items.pop()
+        if self.items:
             return self.items.pop()
         print('error')
 
@@ -31,7 +23,6 @@ def read_input():
 
 def solver(arr):
     number_stack = Stack()
-    math_signs = ['+', "-", "*", "/"]
     operators = {
         "-": operator.sub,
         "+": operator.add,
@@ -39,7 +30,7 @@ def solver(arr):
         "/": operator.floordiv,
     }
     for element in arr:
-        if element not in math_signs:
+        if element not in operators.keys():
             number_stack.push(int(element))
         else:
             b = number_stack.pop()
