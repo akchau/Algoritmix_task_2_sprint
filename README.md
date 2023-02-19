@@ -1,5 +1,9 @@
 [Перейти к остальным проектам](https://github.com/akchau/akchau/blob/main/README.md#проекты)
 
+[Первая часть часть](https://github.com/akchau/Algoritmix_task_1_sprint)
+
+[Третья часть](https://github.com/akchau/Algoritmix_task_3_sprint)
+
 # Algoritmix_task_2_sprint
 ### Задача 1.
 Гоша реализовал структуру данных Дек, максимальный размер которого определяется заданным числом. Методы push_back(x), push_front(x), pop_back(), pop_front() работали корректно. Но, если в деке было много элементов, программа работала очень долго. Дело в том, что не все операции выполнялись за O(1). Помогите Гоше! Напишите эффективную реализацию.
